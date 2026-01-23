@@ -1,8 +1,4 @@
-drop DATABASE lab_04;
-DROP DATABASE retaildb;
-DROP DATABASE studentdb;
-DROP DATABASE student_db;
-DROP DATABASE test;
+
 
 use MovieRecommendationSystem;
 INSERT INTO Movie (movie_id, movie_title, genre, release_year) VALUES
