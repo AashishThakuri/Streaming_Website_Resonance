@@ -28,9 +28,10 @@ Based on these ratings, user preferences can be analyzed and movie recommendatio
 
 ---
 
-![Untitled diagram-2026-01-25-103031](https://github.com/user-attachments/assets/579310e6-5497-4832-b8cc-33a4914b8167)
+![Uploading Mermaid Chart - Create complex, visual diagrams with text.-2026-01-31-080941.png…]()
 
 ---
+
 ## 🗂 Database Structure
 
 The database consists of three tables:
