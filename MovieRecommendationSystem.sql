@@ -21,8 +21,8 @@ CREATE TABLE movies (
     title VARCHAR(150) NOT NULL,
     genre VARCHAR(80),
     release_year INT,
-    language VARCHAR(40),
     poster_url VARCHAR(255),
+    language VARCHAR(40),
     rating DECIMAL(2,1) DEFAULT 0.0
 );
 
