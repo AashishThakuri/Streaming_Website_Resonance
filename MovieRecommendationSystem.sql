@@ -367,10 +367,3 @@ BEGIN
 END$$
 
 DELIMITER ;
-
-
--- MY THOUGHT PROCESS FOR THE CRUD OPERATIONS:
-    -- CRUD OPERATIONS WILL BE INITIATED FROM THE FRONTEND AND WILL BE EXECUTED IN THE BACKEND
-    -- Admin can ADD / UPDATE / DELETE → movies and ratings
-    -- User can sign in / sign out → auth_sessions
-    -- User can rate movies → ratings (but only once per movie because of UNIQUE(user_id, movie_id))
