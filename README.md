@@ -1,122 +1,56 @@
-## 🎬 Movie Recommendation System
+# Movie Recommendation System Database
 
-### DBMS Mini Project
+## Project Overview
+This project is a relational database backend designed to power a **Movie Recommendation System**. It manages a library of movies, user ratings, and administrative controls. The system features built-in logic (Stored Procedures) to handle rating updates and generate content-based recommendations by genre.
 
----
+## Database Schema
 
-## 📌 Project Overview
+The system uses **MySQL** and consists of the following core tables:
 
-This project is a **Movie Recommendation System** built using relational database concepts.
-The system stores information about users, movies, and ratings given by users to movies.
+### 1. movies
+The central catalog of films.
+* **Columns:** `movie_id`, `title`, `genre`, `release_year`, `rating` (IMDb/External), `language`, `description`, `poster_url`, `trailer_url`.
+* **Features:** Stores metadata for displaying movie details and "Watch Trailer" links.
 
-Based on these ratings, user preferences can be analyzed and movie recommendations can be generated.
+### 2. ratings
+Links users to movies with a score (1-5).
+* **Columns:** `rating_id`, `user_id`, `movie_id`, `rating`, `rated_at`.
+* **Constraints:** `UNIQUE(user_id, movie_id)` prevents duplicate ratings for the same movie by the same user.
+* **Triggers:** Automatically updates the timestamp on rating changes.
 
-> ⚠️ **This project focuses on database design and SQL, not machine learning.**
+### 3. admins
+Manages system access for content moderators.
+* **Columns:** `admin_id`, `username`, `password`.
 
----
-
-## 🛠 Technologies Used
-
-- **Database:** MySQL
-- **Language:** SQL
-- **Concepts Used:**
-	- Relational Schema
-	- Primary Key
-	- Foreign Key
-	- Constraints
-	- Normalization (up to 3NF)
-
----
-
-![Uploading Mermaid Chart - Create complex, visual diagrams with text.-2026-01-31-080941.png…]()
+### 4. users (Dependency)
+* **Note:** This table is referenced by `ratings` but must be created before setting up the ratings table. It stores user credentials and profile info.
 
 ---
 
-## 🗂 Database Structure
+## Features & Stored Procedures
 
-The database consists of three tables:
+The database includes pre-compiled SQL procedures for efficient data handling:
 
-### 1️⃣ USER Table
-
-Stores information about users.
-
-| Column Name | Description                       |
-|-------------|-----------------------------------|
-| user_id     | Unique identifier for each user   |
-| user_name   | Name of the user                  |
-
-**Primary Key:** `user_id`
+| Procedure | Functionality |
+| :--- | :--- |
+| **rate_movie** | Handles "Upsert" logic: Inserts a new rating or updates an existing one if the user has already rated the movie. |
+| **recommend_movies_by_genre** | The core recommendation engine. It suggests movies sharing a specific genre, excluding the one currently being viewed, sorted by rating and randomized for variety. |
+| **add_movie** | A helper procedure for admins to insert new movie metadata quickly. |
 
 ---
 
-### 2️⃣ MOVIE Table
+## Setup & Installation
 
-Stores details of movies.
+### Prerequisites
+* MySQL Server (8.0+)
+* MySQL Workbench or any SQL Client
 
-| Column Name   | Description                        |
-|--------------|------------------------------------|
-| movie_id     | Unique identifier for each movie    |
-| movie_title  | Title of the movie                  |
-| genre        | Genre of the movie                  |
-| release_year | Year the movie was released         |
+### Step 1: Create the Database
+Run the provided SQL script. **Important:** Ensure you create the `users` table before the `ratings` table to satisfy foreign key constraints.
 
-**Primary Key:** `movie_id`
-
----
-
-### 3️⃣ RATING Table
-
-Stores ratings given by users to movies.
-
-| Column Name | Description                          |
-|-------------|--------------------------------------|
-| rating_id   | Unique identifier for each rating     |
-| user_id     | ID of the user who rated the movie    |
-| movie_id    | ID of the movie being rated           |
-| rating      | Rating value (1 to 5)                |
-
-**Primary Key:** `rating_id`
-
-**Foreign Keys:**
-
-- `user_id` → USER(`user_id`)
-- `movie_id` → MOVIE(`movie_id`)
-
-**Constraint:** Rating value must be between 1 and 5
-
----
-
-## 🔗 Relationships Between Tables
-
-- One User can rate many Movies
-- One Movie can receive ratings from many Users
-- The RATING table resolves the many-to-many (M:N) relationship between USER and MOVIE
-
-**Relationship Summary**
-
-- USER 1 : N RATING
-- MOVIE 1 : N RATING
-
----
-
-## 🧱 Normalization
-
-The database is normalized up to **Third Normal Form (3NF)**:
-
-- **1NF:** All attributes are atomic and no repeating groups exist
-- **2NF:** No partial dependency on primary keys
-- **3NF:** No transitive dependency between non-key attributes
-
-This ensures minimal redundancy and data consistency.
-
----
-
-## 🧪 Sample Data
-
-The database contains:
-
-- 4 users
-- 28 movies across multiple genres
-- 112 ratings
-
-This dataset allows meaningful testing and analysis.
+```sql
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100),
+    email VARCHAR(100) UNIQUE
+);
